@@ -1,6 +1,6 @@
 {
   "type": "module",
-  "name": "api2",
+  "name": "api-triagem-hospitalar",
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
@@ -10,7 +10,7 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "description": "",
+  "description": "API para sistema de triagem hospitalar",
   "dependencies": {
     "cors": "^2.8.6",
     "express": "^5.2.1",

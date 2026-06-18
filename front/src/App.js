@@ -1,48 +1,49 @@
-import Menu from './componentes/Menu';
-import PaginaCatalogo from './componentes/PaginaCatalogo';
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 
-import PaginaClienteLista from './componentes/PaginaClienteLista';
-import PaginaClienteCadastro from './componentes/PaginaClienteCadastro';
+import Menu from "./componentes/Menu";
 
-import PaginaVeiculoLista from './componentes/PaginaVeiculoLista';
-import PaginaVeiculoCadastro from './componentes/PaginaVeiculoCadastro';
-
-import PaginaCategoriaLista from './componentes/PaginaCategoriaLista';
-import PaginaCategoriaCadastro from './componentes/PaginaCategoriaCadastro';
-
-import PaginaAluguelLista from "./componentes/PaginaAluguelLista";
-import PaginaAluguelCadastro from "./componentes/PaginaAluguelCadastro";
-
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import PaginaInicio from "./componentes/PaginaInicio";
+import PaginaConsultaIntegracaoLista from "./componentes/PaginaConsultaIntegracaoLista";
+import PaginaTriagemLista from "./componentes/PaginaTriagemLista";
+import PaginaTriagemCadastro from "./componentes/PaginaTriagemCadastro";
+import PaginaClassificacaoRiscoLista from "./componentes/PaginaClassificacaoRiscoLista";
+import PaginaLogTriagemLista from "./componentes/PaginaLogTriagemLista";
 
 function App() {
-  return (
-    <div className="App">
-      <BrowserRouter>
-        <Menu />
+    return (
+        <BrowserRouter>
+            <Menu />
 
-        <Routes>
-          <Route path="/" element={<PaginaCatalogo />} />
+            <Routes>
+                <Route path="/" element={<PaginaInicio />} />
 
-          <Route path="/clientes" element={<PaginaClienteLista />} />
-          <Route path="/cliente" element={<PaginaClienteCadastro />} />
-          <Route path="/cliente/:id" element={<PaginaClienteCadastro />} />
+                <Route
+                    path="/consultas-integracao"
+                    element={<PaginaConsultaIntegracaoLista />}
+                />
 
-          <Route path="/veiculos" element={<PaginaVeiculoLista />} />
-          <Route path="/veiculo" element={<PaginaVeiculoCadastro />} />
-          <Route path="/veiculo/:id" element={<PaginaVeiculoCadastro />} />
+                <Route
+                    path="/triagens"
+                    element={<PaginaTriagemLista />}
+                />
 
-          <Route path="/categorias" element={<PaginaCategoriaLista />} />
-          <Route path="/categoria" element={<PaginaCategoriaCadastro />} />
-          <Route path="/categoria/:id" element={<PaginaCategoriaCadastro />} />
+                <Route
+                    path="/triagem"
+                    element={<PaginaTriagemCadastro />}
+                />
 
-          <Route path="/alugueis" element={<PaginaAluguelLista />} />
-          <Route path="/aluguel" element={<PaginaAluguelCadastro />} />
-          <Route path="/aluguel/:id" element={<PaginaAluguelCadastro />} />
-        </Routes>
-      </BrowserRouter>
-    </div>
-  );
+                <Route
+                    path="/classificacoes-risco"
+                    element={<PaginaClassificacaoRiscoLista />}
+                />
+
+                <Route
+                    path="/logs-triagem"
+                    element={<PaginaLogTriagemLista />}
+                />
+            </Routes>
+        </BrowserRouter>
+    );
 }
 
 export default App;

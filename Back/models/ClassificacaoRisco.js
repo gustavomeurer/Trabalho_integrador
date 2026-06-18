@@ -1,30 +1,25 @@
 import banco from "../Banco.js";
 import { DataTypes } from "sequelize";
 
-
-const Veiculo = banco.define(
-    'veiculos',
+const ClassificacaoRisco = banco.define(
+    'classificacao_risco',
     {
-        id: {
+        id_classificacao: {
             type: DataTypes.INTEGER,
             allowNull: false,
             primaryKey: true,
             autoIncrement: true
         },
-        modelo: {
-            type: DataTypes.STRING,
-            allowNull: false
-        },
-        marca: {
-            type: DataTypes.STRING,
-            allowNull: false
-        },
-        placa: {
-            type: DataTypes.STRING,
+        nivel: {
+            type: DataTypes.STRING(30),
             allowNull: false,
             unique: true
         },
-        categoria_id: {
+        descricao: {
+            type: DataTypes.STRING(150),
+            allowNull: false
+        },
+        prioridade: {
             type: DataTypes.INTEGER,
             allowNull: false
         }
@@ -34,5 +29,4 @@ const Veiculo = banco.define(
     }
 );
 
-
-export default Veiculo;
+export default ClassificacaoRisco;

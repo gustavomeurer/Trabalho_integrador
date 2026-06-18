@@ -1,72 +1,78 @@
-import Express from "express";
+import express from "express";
 import cors from "cors";
+
 import banco from "./Banco.js";
 
-import categoria from "./controllers/CategoriaController.js";
-import veiculo from "./controllers/VeiculoController.js";
-import cliente from "./controllers/ClienteController.js";
-import aluguel from "./controllers/AluguelController.js";
+import ClassificacaoRiscoController from "./controllers/ClassificacaoRiscoController.js";
+import ConsultaIntegracaoController from "./controllers/ConsultaIntegracaoController.js";
+import TriagemController from "./controllers/TriagemController.js";
+import LogTriagemController from "./controllers/LogTriagemController.js";
+import G3AgendaController from "./controllers/G3AgendaController.js";
+
+const app = express();
+
+app.use(cors());
+app.use(express.json());
 
 try {
     await banco.authenticate();
-    console.log("Banco conectado com sucesso.");
+    console.log("Conexão com o banco de dados realizada com sucesso.");
 } catch (error) {
     console.error("Erro ao conectar com o banco de dados:", error);
 }
 
-const api = Express();
-
-api.use(cors());
-api.use(Express.json());
-
-api.get("/teste", (req, res) => {
-    res.send("API de aluguel de carros funcionando");
+app.get("/", (req, res) => {
+    res.send("API do Sistema de Triagem Hospitalar funcionando.");
 });
 
-/*
-    ROTAS DE CATEGORIAS
-    POST, GET lista, GET por ID, PUT, DELETE
-*/
+// integração com api do G4, aqui são as consultas. Vem pelo botão de importar no menu2
 
-api.get("/categorias", categoria.listar);
-api.get("/categorias/:id", categoria.selecionar);
-api.post("/categorias", categoria.inserir);
-api.put("/categorias/:id", categoria.alterar);
-api.delete("/categorias/:id", categoria.excluir);
+app.post("/g4/importar-consultas", ConsultaIntegracaoController.importarG4);
 
-/*
-    ROTAS DE VEÍCULOS
-    POST, GET lista, GET por ID, PUT, DELETE
-*/
 
-api.get("/veiculos", veiculo.listar);
-api.get("/veiculos/:id", veiculo.selecionar);
-api.post("/veiculos", veiculo.inserir);
-api.put("/veiculos/:id", veiculo.alterar);
-api.delete("/veiculos/:id", veiculo.excluir);
+//rota de class risco
+app.get("/classificacoes-risco", ClassificacaoRiscoController.listar);
+app.get("/classificacoes-risco/:id", ClassificacaoRiscoController.selecionar);
+app.post("/classificacoes-risco", ClassificacaoRiscoController.inserir);
+app.put("/classificacoes-risco/:id", ClassificacaoRiscoController.alterar);
+app.delete("/classificacoes-risco/:id", ClassificacaoRiscoController.excluir);
 
-/*
-    ROTAS DE CLIENTES
-    POST, GET lista, GET por ID, PUT, DELETE
-*/
 
-api.get("/clientes", cliente.listar);
-api.get("/clientes/:id", cliente.selecionar);
-api.post("/clientes", cliente.inserir);
-api.put("/clientes/:id", cliente.alterar);
-api.delete("/clientes/:id", cliente.excluir);
+//rota das consultas de integracao do g4
+app.get("/consultas-integracao", ConsultaIntegracaoController.listar);
+app.get("/consultas-integracao/:id", ConsultaIntegracaoController.selecionar);
+app.post("/consultas-integracao", ConsultaIntegracaoController.inserir);
+app.put("/consultas-integracao/:id", ConsultaIntegracaoController.alterar);
+app.delete("/consultas-integracao/:id", ConsultaIntegracaoController.excluir);
 
-/*
-    ROTAS DE ALUGUÉIS
-    POST, GET lista, GET por ID, PUT, DELETE
-*/
 
-api.get("/alugueis", aluguel.listar);
-api.get("/alugueis/:id", aluguel.selecionar);
-api.post("/alugueis", aluguel.inserir);
-api.put("/alugueis/:id", aluguel.alterar);
-api.delete("/alugueis/:id", aluguel.excluir);
+//rota das triagens
+app.get("/triagens/view", TriagemController.listarView);
+app.get("/triagens/agenda", TriagemController.listarAgenda);
+app.get("/triagens/view/:id", TriagemController.selecionarView);
 
-api.listen(3000, () => {
-    console.log("API rodando na porta 3000...");
+app.get("/triagens", TriagemController.listar);
+app.get("/triagens/:id", TriagemController.selecionar);
+app.post("/triagens", TriagemController.inserir);
+app.put("/triagens/:id", TriagemController.alterar);
+app.delete("/triagens/:id", TriagemController.excluir);
+
+
+//rota dos logs da triagem. criei o log apenas para usar a trigger do BD que exigia o trabalho. N tem rota de exclusao
+app.get("/logs-triagem", LogTriagemController.listar);
+app.get("/logs-triagem/:id", LogTriagemController.selecionar);
+
+
+//Integra com G3 a agenda. Eles irão consumir
+app.get("/g3/agenda-prioridades", G3AgendaController.listarPrioridadesAgenda);
+app.get(
+    "/g3/agenda-prioridades/:idConsultaExterna",
+    G3AgendaController.selecionarPrioridadePorConsulta
+);
+
+
+const porta = 3000;
+
+app.listen(porta, () => {
+    console.log("Servidor rodando na porta " + porta);
 });
